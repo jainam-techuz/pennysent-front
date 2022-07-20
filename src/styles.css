@@ -1,0 +1,7 @@
+/* You can add global styles to this file, and also import other style files */
+.form-control.ng-invalid.ng-dirty.ng-touched{border-color: red;}
+#login, #forgot-password {
+    background-image: url(./assets/img/gallery/light-bg.jpg);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}

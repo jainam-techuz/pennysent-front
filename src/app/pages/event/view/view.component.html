@@ -1,0 +1,164 @@
+<section class="users-edit">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-content">
+                    <div class="card-body">
+                        <ul ngbNav #nav="ngbNav" [activeId]="1"
+                            class="nav-tabs justify-content-left">
+                            <li [ngbNavItem]="1">
+                                <a ngbNavLink class="nav-link d-flex align-items-center">
+                                    <i class="ft-info mr-1"></i>
+                                    <span class="d-none d-sm-block" id="click">Information</span>
+                                </a>
+                                <ng-template ngbNavContent>
+                                    <div class="mt-2" id="account">
+                                        <div class="row">
+                                            <div class="col-12 col-md-6">
+                                                <div class="controls mb-3">
+                                                    <label class="text-bold-700">
+                                                        Event Title
+                                                    </label><br />
+                                                    <span>
+                                                        {{ circleDetails?.circle_name }}
+                                                    </span>
+                                                </div>
+                                                <div class="controls mb-3">
+                                                    <label class="text-bold-700">
+                                                        Event Type
+                                                    </label><br />
+                                                    <span>
+                                                        {{ circleDetails?.type === 1 ?
+                                                        'Public' : 'Private' }}
+                                                    </span>
+                                                </div>
+                                                <div class="controls mb-3">
+                                                    <label class="text-bold-700">
+                                                        Circle Code
+                                                    </label><br />
+                                                    <span>
+                                                        {{ circleDetails?.circle_code }}
+                                                    </span>
+                                                    <a class="info" id="copy"
+                                                        (click)="copyToClipboard(circleDetails?.circle_code)">
+                                                        <i class="ft-copy ml-1"></i>
+                                                    </a>
+                                                </div>
+                                                <div class="controls mb-3">
+                                                    <label class="text-bold-700">
+                                                        Target Amount
+                                                    </label><br />
+                                                    <span>
+                                                        AED {{ circleDetails?.target_amount || '0' }}
+                                                    </span>
+                                                </div>
+                                                <div class="controls mb-3">
+                                                    <label class="text-bold-700">
+                                                        Event Description
+                                                    </label><br />
+                                                    <span>
+                                                        {{ circleDetails?.circle_description || '-' }}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12 col-md-6">
+                                                <div class="controls mb-3">
+                                                    <label class="text-bold-700">
+                                                        Created By
+                                                    </label><br />
+                                                    <span>
+                                                        {{ circleDetails?.user?.name }}
+                                                    </span>
+                                                </div>
+                                                <div class="controls mb-3">
+                                                    <label class="text-bold-700">
+                                                        Deadline Date
+                                                    </label><br />
+                                                    <span>
+                                                        {{ (circleDetails?.circle_deadline |
+                                                        date: 'MMM dd, hh:mm a' | dateSuffix) 
+                                                        || '-' }}
+                                                    </span>
+                                                </div>
+                                                <div class="controls mb-3">
+                                                    <label class="text-bold-700">
+                                                        Status
+                                                    </label><br />
+                                                    <span class="badge badge-pill bg-light-success"
+                                                        *ngIf="circleDetails?.status === 2">Active</span>
+                                                    <span class="badge badge-pill bg-light-primary"
+                                                        *ngIf="circleDetails?.status === 3">Expired</span>
+                                                    <span class="badge badge-pill bg-light-danger"
+                                                        *ngIf="circleDetails?.status === 4">Deleted</span>
+                                                </div>
+                                                <div class="controls mb-3">
+                                                    <label class="text-bold-700">
+                                                        Amount Received
+                                                    </label><br />
+                                                    <span>
+                                                        AED {{ circleDetails?.amount_received }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </li>
+                            <li [ngbNavItem]="2">
+                                <a ngbNavLink class="nav-link d-flex align-items-center">
+                                    <i class="ft-dollar-sign mr-1"></i>
+                                    <span class="d-none d-sm-block">Contributions</span>
+                                </a>
+                                <ng-template ngbNavContent>
+                                    <ngx-datatable class="mt-2 bootstrap core-bootstrap"
+                                        rowHeight="auto" [columnMode]="columnMode.force"
+                                        [rows]="rows" [headerHeight]="50" [footerHeight]="0">
+                                        <ngx-datatable-column name="Username" [sortable]="false">
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                                <div class="d-flex align-items-center">
+                                                    <img *ngIf="row?.user?.logo_url" class="avatar"
+                                                        [src]="row.user.logo_url" height="32"
+                                                        width="32" />
+                                                    <div *ngIf="!row?.user?.logo_url" class="avatar"
+                                                        [ngClass]="row.logoClass">
+                                                        <span class="avatar-content"
+                                                            style="height: 32px; width: 32px;">
+                                                            {{row?.user?.first_name?.charAt(0).toUpperCase()}}{{row?.user?.last_name?.charAt(0).toUpperCase()}}
+                                                        </span>
+                                                    </div>
+                                                    <div class="cell-line-height ml-2">
+                                                        <p class="font-medium-1 line-height-1 mb-0">
+                                                            {{
+                                                            row?.user?.name }}</p>
+                                                        <span
+                                                            class="text-muted font-small-2">{{row?.user?.email}}</span>
+                                                    </div>
+                                                </div>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column name="Date of Contributions"
+                                            [sortable]="false">
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                                {{ row?.contributed_on | date: 'MMM dd, hh:mm a' |
+                                                dateSuffix }}
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column name="Amount" [sortable]="false">
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                                AED {{ row?.contributed }}
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                    </ngx-datatable>
+                                </ng-template>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div [ngbNavOutlet]="nav"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

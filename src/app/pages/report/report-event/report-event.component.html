@@ -1,0 +1,72 @@
+<section id="ngx-datatable-filter">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-content">
+                    <div class="card-body">
+                        <fieldset class="form-group">
+                            <label>Show
+                                <select name="users-list-select"
+                                    class="form-control form-control-sm d-inline-block width-100 p-right-25"
+                                    (change)="updateLimit($event)">
+                                    <option value="10">10 Entries</option>
+                                    <option value="25">25 Entries</option>
+                                    <option value="50">50 Entries</option>
+                                </select>
+                            </label>
+                            <i class="ft-download ml-3" (click)="download()"></i>
+                            <label for="ngx-filter-ref" class="float-right">Search:
+                                <input id="ngx-filter-ref"
+                                    class="form-control form-control-sm d-inline-block width-200 ml-1"
+                                    type="text" (keyup.enter)="searchEvent($event)" />
+                            </label>
+                        </fieldset>
+                        <ngx-datatable class="bootstrap core-bootstrap" rowHeight="auto"
+                            [rows]="rows" [headerHeight]="50" [footerHeight]="50"
+                            [offset]="page.currentPage" [columnMode]="columnMode.force"
+                            [limit]="page.recordPerPage" [count]="page.totalRecords"
+                            [externalPaging]="true" [externalSorting]="true"
+                            (page)="getEvents($event)" (sort)="sortCallback($event)">
+                            <ngx-datatable-column name="Title" prop="circle_name" [width]="100">
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Created By" [sortable]="false"
+                                [width]="100">
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    {{row?.user?.name}}
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Type" [sortable]="false" [width]="60"
+                                [sortable]="false">
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    <span *ngIf="row?.type === 1">Public</span>
+                                    <span *ngIf="row?.type === 2">Private</span>
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Target" prop="target_amount" [width]="60">
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    AED {{row?.target_amount || '0'}}
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Received" [width]="60" [sortable]="false">
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    AED {{row?.amount_received || '0'}}
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Status" prop="status" [sortable]="false"
+                                [width]="60">
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    <div class="badge badge-pill bg-light-success"
+                                        *ngIf="row?.status === 2">Active</div>
+                                    <div class="badge badge-pill bg-light-primary"
+                                        *ngIf="row?.status === 3">Expired</div>
+                                    <div class="badge badge-pill bg-light-danger"
+                                        *ngIf="row?.status === 4">Deleted</div>
+                                </ng-template>
+                            </ngx-datatable-column>
+                        </ngx-datatable>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

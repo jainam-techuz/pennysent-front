@@ -1,0 +1,279 @@
+<style>
+    #toggle-password {
+        float: right;
+        margin-right: 15px;
+        margin-top: -27px;
+    }
+</style>
+
+<section class="users-edit">
+    <div class="row">
+        <div class="col-12" *ngIf="!isAdmin">
+            <div class="media d-flex align-items-center">
+                <img *ngIf="logoUrl" [src]="logoUrl" width="64" height="64"
+                    class="users-avatar-shadow rounded" />
+                <div *ngIf="!logoUrl" class="avatar rounded">
+                    <span class="avatar-content"
+                        style="height: 64px; width: 64px; font-size: 16px;">
+                        {{f?.first_name?.value?.charAt(0).toUpperCase()}}
+                        {{f?.last_name?.value?.charAt(0).toUpperCase()}}
+                    </span>
+                </div>
+                <div class="media-body ml-3">
+                    <h4>
+                        <span class="users-view-name mr-1">
+                            {{f?.first_name?.value}} {{f?.last_name?.value}}
+                        </span>
+                    </h4>
+                    <span class="mr-1">Wallet Balance:</span>
+                    <span class="users-view-id"><b>AED {{balance}}</b></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card">
+                <div class="card-content">
+                    <div class="card-body">
+                        <ul ngbNav #nav="ngbNav" [activeId]="1"
+                            class="nav-tabs justify-content-left">
+                            <li [ngbNavItem]="1">
+                                <a ngbNavLink class="nav-link d-flex align-items-center">
+                                    <i class="ft-user mr-1"></i>
+                                    <span class="d-none d-sm-block" id="click">Account</span>
+                                </a>
+                                <ng-template ngbNavContent>
+                                    <div class="mt-2" id="account">
+                                        <form [formGroup]="userForm" (ngSubmit)="onSubmit()"
+                                            id="userForm" novalidate>
+                                            <div class="row">
+                                                <div class="col-12 col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="controls">
+                                                            <label>First Name</label>
+                                                            <input type="text"
+                                                                formControlName="first_name"
+                                                                class="form-control"
+                                                                placeholder="First Name">
+                                                            <app-control-messages
+                                                                fieldName="First name"
+                                                                [control]="f.first_name">
+                                                            </app-control-messages>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="controls">
+                                                            <label>E-mail</label>
+                                                            <input type="text"
+                                                                formControlName="email"
+                                                                class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="controls">
+                                                            <label>Status</label>
+                                                            <select class="form-control"
+                                                                formControlName="status">
+                                                                <option value="">
+                                                                    Select Status
+                                                                </option>
+                                                                <option [ngValue]="0">Inactive
+                                                                </option>
+                                                                <option [ngValue]="1">Active
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12 col-md-6">
+                                                    <div class="form-group">
+                                                        <div class="controls">
+                                                            <label>Last Name</label>
+                                                            <input type="text"
+                                                                formControlName="last_name"
+                                                                class="form-control"
+                                                                placeholder="Last Address">
+                                                            <app-control-messages
+                                                                fieldName="Last name"
+                                                                [control]="f.last_name">
+                                                            </app-control-messages>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="controls">
+                                                            <label>Contact</label>
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <input type="text"
+                                                                        formControlName="country_code"
+                                                                        class="form-control"
+                                                                        placeholder="+00"
+                                                                        maxlength="5">
+                                                                    <app-control-messages
+                                                                        fieldName="Code"
+                                                                        [control]="f.country_code">
+                                                                    </app-control-messages>
+                                                                </div>
+                                                                <div class="col-md-9">
+                                                                    <input type="text"
+                                                                        formControlName="mobile_number"
+                                                                        class="form-control"
+                                                                        placeholder="Mobile Number"
+                                                                        autocomplete="off"
+                                                                        onkeypress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))">
+                                                                    <app-control-messages
+                                                                        fieldName="Mobile number"
+                                                                        [control]="f.mobile_number">
+                                                                    </app-control-messages>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="controls">
+                                                            <label>Password</label>
+                                                            <input type="password"
+                                                                formControlName="password"
+                                                                class="form-control"
+                                                                placeholder="Password"
+                                                                autocomplete="new-password"
+                                                                #Password>
+                                                            <span (click)="togglePassword(Password)"
+                                                                class="{{toggleEye}}"
+                                                                id="toggle-password"></span>
+                                                            <app-control-messages
+                                                                fieldName="Password"
+                                                                [control]="f.password">
+                                                            </app-control-messages>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div
+                                                    class="col-12 d-flex flex-sm-row flex-column justify-content-end mt-3 mt-sm-2">
+                                                    <button type="submit"
+                                                        class="btn btn-primary mb-2 mb-sm-0 mr-sm-2">
+                                                        <i class="ft-check-square mr-1"></i>
+                                                        Save
+                                                    </button>
+                                                    <!-- <button type="reset" class="btn btn-secondary">
+                                                        Cancel
+                                                    </button> -->
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </ng-template>
+                            </li>
+                            <li [ngbNavItem]="2" *ngIf="!isAdmin">
+                                <a ngbNavLink class="nav-link d-flex align-items-center">
+                                    <i class="ft-dollar-sign mr-1"></i>
+                                    <span class="d-none d-sm-block">Transactions</span>
+                                </a>
+                                <ng-template ngbNavContent>
+                                    <ngx-datatable class="mt-2 bootstrap core-bootstrap"
+                                        rowHeight="auto" [columnMode]="columnMode.force"
+                                        [rows]="rows" [headerHeight]="50" [footerHeight]="0">
+                                        <ngx-datatable-column name="Type" [sortable]="false">
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                                <ng-container *ngIf="row?.payment_mode == 1">
+                                                    <span style="color: #09AFC5">Funds Added</span>
+                                                </ng-container>
+                                                <ng-container *ngIf="row?.payment_mode == 2">
+                                                    <span style="color: #833471">Withdraw</span>
+                                                </ng-container>
+                                                <ng-container *ngIf="row?.payment_mode == 3">
+                                                    <span style="color: #7B7BD6">Circle
+                                                        Payment</span>
+                                                </ng-container>
+                                                <ng-container *ngIf="row?.payment_mode == 4">
+                                                    <span style="color: #F0932B">Refund Given</span>
+                                                </ng-container>
+                                                <ng-container *ngIf="row?.payment_mode == 5">
+                                                    <span style="color: #F0932B">Refund Taken</span>
+                                                </ng-container>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column name="Date" [sortable]="false">
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                                {{ row?.created_at | date: 'MMM dd, hh:mm a' |
+                                                dateSuffix }}
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column name="Circle" [sortable]="false">
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                                {{ row?.circle?.circle_name }}
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column name="User" [sortable]="false">
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                                <ng-container *ngIf="row?.payment_mode == 3">
+                                                    {{ row?.circle?.user?.name }}
+                                                </ng-container>
+                                                <ng-container *ngIf="row?.payment_mode != 3">
+                                                    {{ row?.refundedUser?.first_name ||
+                                                    f?.first_name?.value }}
+                                                    {{ row?.refundedUser?.last_name ||
+                                                    f?.last_name?.value }}
+                                                </ng-container>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column name="Amount" [sortable]="false">
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                                <ng-container
+                                                    *ngIf="row?.payment_mode == 1 || row?.payment_mode == 5; else elseBlock">
+                                                    <span style="color: #3FB96C">
+                                                        + {{ row?.amount }} AED
+                                                        &nbsp;
+                                                        <i class="ft-trending-up"></i>
+                                                    </span>
+                                                </ng-container>
+                                                <ng-template #elseBlock>
+                                                    <span style="color: #F05323">
+                                                        - {{ row?.amount }} AED
+                                                        &nbsp;
+                                                        <i class="ft-trending-down"></i>
+                                                    </span>
+                                                </ng-template>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                    </ngx-datatable>
+                                </ng-template>
+                            </li>
+                            <li [ngbNavItem]="3" *ngIf="!isAdmin">
+                                <a ngbNavLink class="nav-link d-flex align-items-center">
+                                    <i class="ft-bell mr-1"></i>
+                                    <span class="d-none d-sm-block">Notifications</span>
+                                </a>
+                                <ng-template ngbNavContent>
+                                    <ul class="list-group mt-2"
+                                        *ngFor="let notification of notifications; trackBy: trackByFn">
+                                        <li
+                                            class="list-group-item list-group-item-action flex-column align-items-start">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h6 class="mb-2">
+                                                    {{notification?.typeName}}
+                                                </h6>
+                                                <small class="text-muted">
+                                                    {{notification?.created_at | lastSeen}}
+                                                </small>
+                                            </div>
+                                            <p class="mb-1">{{notification?.message}}</p>
+                                        </li>
+                                    </ul>
+                                    <ul class="list-group mt-2" *ngIf="!notifications.length">
+                                        <span>No notifications to display</span>
+                                    </ul>
+                                </ng-template>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div [ngbNavOutlet]="nav"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

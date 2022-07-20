@@ -1,0 +1,95 @@
+<section id="ngx-datatable-filter">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-content">
+                    <div class="card-body">
+                        <fieldset class="form-group">
+                            <label>Show
+                                <select name="users-list-select"
+                                    class="form-control form-control-sm d-inline-block width-105"
+                                    (change)="updateLimit($event)">
+                                    <option value="10">10 Entries</option>
+                                    <option value="25">25 Entries</option>
+                                    <option value="50">50 Entries</option>
+                                </select>
+                            </label>
+                            <div class="btn btn-sm btn-primary p-0 ml-2"
+                                style="display: inline-block;">
+                                <button type="button" class="btn btn-primary"
+                                    (click)="open(categoryModal)">
+                                    Add
+                                </button>
+                            </div>
+                            <label for="ngx-filter-ref" class="float-right">Search:
+                                <input id="ngx-filter-ref"
+                                    class="form-control form-control-sm d-inline-block width-200 ml-1"
+                                    type="text" (keyup)="searchCategory($event)" />
+                            </label>
+                        </fieldset>
+                        <ngx-datatable class="bootstrap core-bootstrap" rowHeight="auto"
+                            [columnMode]="columnMode.force" [rows]="rows" [limit]="limitRef"
+                            [headerHeight]="50" [footerHeight]="50">
+                            <ngx-datatable-column name="#" [sortable]="false" [width]="20">
+                                <ng-template let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                                    {{rowIndex+1}}
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Name" prop="name" [width]="200">
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    <input type="text" [disabled]="row.disabled"
+                                        [(ngModel)]="row.name" class="form-control">
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Actions" [sortable]="false" [width]="60">
+                                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex"
+                                    let-row="row">
+                                    <ng-container *ngIf="row.disabled">
+                                        <a class="info" title="edit" (click)="row.disabled=false">
+                                            <i class="ft-edit-2 font-medium-3 mr-2"></i>
+                                        </a>
+                                        <a class="danger" title="delete" (click)="remove(row)">
+                                            <i class="ft-trash-2 font-medium-3"></i>
+                                        </a>
+                                    </ng-container>
+                                    <ng-container *ngIf="!row.disabled">
+                                        <a class="success" title="save" (click)="save(row)">
+                                            <i class="ft-save font-medium-3 mr-2"></i>
+                                        </a>
+                                        <a class="danger" title="cancel" (click)="reset(row)">
+                                            <i class="ft-x font-medium-3"></i>
+                                        </a>
+                                    </ng-container>
+                                </ng-template>
+                            </ngx-datatable-column>
+                        </ngx-datatable>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modal -->
+<ng-template #categoryModal let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Add Category</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <div class="controls">
+                <label>Name</label>
+                <input type="text" #Name class="form-control" placeholder="Category Name">
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" (click)="add(Name)" class="btn btn-primary mb-2 mb-sm-0 mr-sm-2">
+            Add
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="c()">Close</button>
+    </div>
+</ng-template>

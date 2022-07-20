@@ -1,0 +1,92 @@
+<section class="faq-wrapper">
+    <div class="faq-search">
+        <div class="row">
+            <div class="col-12">
+                <div class="card faq-bg bg-transparent box-shadow-0">
+                    <div class="card-content">
+                        <div class="card-body p-md-5">
+                            <h1 class="faq-title text-center mb-3" id="click">FAQs</h1>
+                            <div class="card">
+                                <div class="accordion">
+                                    <div class="card-content">
+                                        <div class="card-body">
+                                            <ngb-accordion [closeOthers]="true">
+                                                <ngb-panel [id]="'faq'+faq.id"
+                                                    *ngFor="let faq of faqs; trackBy: trackByFn">
+                                                    <ng-template ngbPanelTitle>
+                                                        <a data-toggle="collapse"
+                                                            aria-expanded="false"
+                                                            aria-controls="accordion1"
+                                                            class="card-title" #title>
+                                                            {{faq?.question}}
+                                                        </a>
+                                                        <i (click)="title.click(); open(faqModal, faq)"
+                                                            style="float: right;"
+                                                            class="ft-edit pl-2 pr-2"></i>
+                                                    </ng-template>
+                                                    <ng-template ngbPanelContent>
+                                                        <p>{{faq?.answer}}</p>
+                                                    </ng-template>
+                                                </ngb-panel>
+                                            </ngb-accordion>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modal -->
+<ng-template #faqModal let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Edit FAQ</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="faqForm" id="faqForm" novalidate>
+            <div class="form-group">
+                <div class="controls">
+                    <label>Question</label>
+                    <input type="text" formControlName="question" class="form-control"
+                        placeholder="Question">
+                    <app-control-messages fieldName="Question" [control]="f.question">
+                    </app-control-messages>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="controls">
+                    <label>Answer</label>
+                    <textarea type="text" formControlName="answer" class="form-control"
+                        placeholder="Answer" style="height: 100px;"></textarea>
+                    <app-control-messages fieldName="Answer" [control]="f.answer">
+                    </app-control-messages>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="controls">
+                    <label>Status</label>
+                    <select class="form-control" formControlName="status">
+                        <option [ngValue]="false">Inactive
+                        </option>
+                        <option [ngValue]="true">Active</option>
+                    </select>
+                    <app-control-messages fieldName="Status" [control]="f.status">
+                    </app-control-messages>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" (click)="onSubmit()" class="btn btn-primary mb-2 mb-sm-0 mr-sm-2">
+            Save Changes
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="c()">Close</button>
+    </div>
+</ng-template>

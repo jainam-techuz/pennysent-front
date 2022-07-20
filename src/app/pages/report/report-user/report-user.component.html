@@ -1,0 +1,83 @@
+<section id="ngx-datatable-filter">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-content">
+                    <div class="card-body">
+                        <fieldset class="form-group">
+                            <label>Show
+                                <select name="users-list-select"
+                                    class="form-control form-control-sm d-inline-block width-100 p-right-25"
+                                    (change)="updateLimit($event)">
+                                    <option value="10">10 Entries</option>
+                                    <option value="25">25 Entries</option>
+                                    <option value="50">50 Entries</option>
+                                </select>
+                            </label>
+                            <i class="ft-download ml-3" (click)="download()"></i>
+                            <label for="ngx-filter-ref" class="float-right">Search:
+                                <input id="ngx-filter-ref"
+                                    class="form-control form-control-sm d-inline-block width-200 ml-1"
+                                    type="text" (keyup.enter)="searchUser($event)" />
+                            </label>
+                        </fieldset>
+                        <ngx-datatable class="bootstrap core-bootstrap" rowHeight="auto"
+                            [rows]="rows" [headerHeight]="50" [footerHeight]="50"
+                            [scrollbarH]="true" [offset]="page.currentPage"
+                            [columnMode]="columnMode.force" [limit]="page.recordPerPage"
+                            [count]="page.totalRecords" [externalPaging]="true"
+                            [externalSorting]="true" (page)="getUsers($event)"
+                            (sort)="sortCallback($event)">
+                            <ngx-datatable-column name="Name" prop="name" [width]="100">
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    <div class="d-flex align-items-center ng-star-inserted">
+                                        <img *ngIf="row?.logo_url" class="avatar"
+                                            [src]="row.logo_url" height="32" width="32" />
+                                        <div *ngIf="!row?.logo_url" class="avatar"
+                                            [ngClass]="row.logoClass">
+                                            <span class="avatar-content"
+                                                style="height: 32px; width: 32px;">
+                                                {{row?.first_name?.charAt(0).toUpperCase()}}{{row?.last_name?.charAt(0).toUpperCase()}}
+                                            </span>
+                                        </div>
+                                        <div class="cell-line-height ml-1">
+                                            {{row?.name|| '-'}}
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Contact" prop="contact" [sortable]="false"
+                                [width]="100">
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Email" prop="email" [sortable]="false"
+                                [width]="180">
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Balace" prop="balance" [width]="60">
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    AED {{row?.balance || '0'}}
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Total Spent" [width]="80"
+                                [sortable]="false">
+                                <ng-template ngx-datatable-cell-template let-row="row">
+                                    AED {{row?.totalSpent || '0'}}
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Status" prop="status" [sortable]="false"
+                                [width]="80">
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    <div class="badge badge-pill bg-light-primary"
+                                        *ngIf="row?.status === 0">Inactive</div>
+                                    <div class="badge badge-pill bg-light-success"
+                                        *ngIf="row?.status === 1">Active</div>
+                                    <div class="badge badge-pill bg-light-danger"
+                                        *ngIf="row?.status === 2">Deleted</div>
+                                </ng-template>
+                            </ngx-datatable-column>
+                        </ngx-datatable>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
